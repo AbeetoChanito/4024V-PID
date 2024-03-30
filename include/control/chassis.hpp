@@ -23,11 +23,11 @@ class Chassis {
             float wheelDiameter,
             float gearRatio,
             std::shared_ptr<PID> lateralPID,
-            const PIDSettled& lateralSettled,
+            std::shared_ptr<PIDSettled> lateralSettled,
             std::shared_ptr<PID> angularPID,
-            const PIDSettled& angularSettled,
+            std::shared_ptr<PIDSettled> angularSettled,
             std::shared_ptr<PID> swingPID,
-            const PIDSettled& swingSettled
+            std::shared_ptr<PIDSettled> swingSettled
         );
 
         void tankControl(float left, float right);
@@ -53,11 +53,11 @@ class Chassis {
         float m_gearRatio;
 
         std::shared_ptr<PID> m_lateralPID;
-        PIDSettled m_lateralSettled;
+        std::shared_ptr<PIDSettled> m_lateralSettled;
 
         std::shared_ptr<PID> m_angularPID;
-        PIDSettled m_angularSettled;
+        std::shared_ptr<PIDSettled> m_angularSettled;
 
         std::shared_ptr<PID> m_swingPID;
-        PIDSettled m_swingSettled;
+        std::shared_ptr<PIDSettled> m_swingSettled;
 };

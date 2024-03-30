@@ -10,11 +10,11 @@ Chassis::Chassis(
     float wheelDiameter,
     float gearRatio,
     std::shared_ptr<PID> lateralPID,
-    const PIDSettled& lateralSettled,
+    std::shared_ptr<PIDSettled> lateralSettled,
     std::shared_ptr<PID> angularPID,
-    const PIDSettled& angularSettled,
+    std::shared_ptr<PIDSettled> angularSettled,
     std::shared_ptr<PID> swingPID,
-    const PIDSettled& swingSettled
+    std::shared_ptr<PIDSettled> swingSettled
 ):  m_leftMotor(leftMotor),
     m_rightMotor(rightMotor),
     m_imu(imu),
@@ -70,7 +70,7 @@ void Chassis::turn(float targetHeading, float maxSpeed) {
     m_angularPID->reset();
     m_angularSettled.reset();
 
-    while (!m_angularSettled.isSettled()) {
+    while (!m_angularSettled->isSettled()) {
         float error = shortenPath(targetHeading - m_imu.get_rotation());
 
         float output = capSpeed(m_angularPID->update(error), maxSpeed);
@@ -93,7 +93,7 @@ void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed) {
         m_leftMotor->brake();
     }
 
-    while (!m_angularSettled.isSettled()) {
+    while (!m_angularSettled->isSettled()) {
         float error = shortenPath(targetHeading - m_imu.get_rotation());
 
         float output = capSpeed(m_swingPID->update(error), maxSpeed);
@@ -121,7 +121,7 @@ void Chassis::move(float targetDistance, float maxSpeed) {
     m_leftMotor->tare_position_all();
     m_rightMotor->tare_position_all();
 
-    while (!m_lateralSettled.isSettled()) {
+    while (!m_lateralSettled->isSettled()) {
         float error = (m_leftMotor->get_position(0) + m_rightMotor->get_position(0)) / 2 * m_gearRatio * m_wheelDiameter * M_PI;
 
         float output = capSpeed(m_lateralPID->update(error), maxSpeed);

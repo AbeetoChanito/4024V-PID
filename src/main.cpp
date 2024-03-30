@@ -11,13 +11,13 @@ auto rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std:
 pros::IMU imu(18);
 
 auto lateralPID = std::make_shared<PID>(0, 0, 0);
-PIDSettled lateralSettled(lateralPID, {{0, 0}, {0, 0}}, 0);
+auto lateralSettled = std::make_shared<PIDSettled>(lateralPID, std::initializer_list<Bound> {{0, 0}, {0, 0}}, 0);
 
 auto angularPID = std::make_shared<PID>(0, 0, 0);
-PIDSettled angularSettled(angularPID, {{0, 0}, {0, 0}}, 0);
+auto angularSettled = std::make_shared<PIDSettled>(angularPID, std::initializer_list<Bound> {{0, 0}, {0, 0}}, 0);
 
 auto swingPID = std::make_shared<PID>(0, 0, 0);
-PIDSettled swingSettled(swingPID, {{0, 0}, {0, 0}}, 0);
+auto swingSettled = std::make_shared<PIDSettled>(swingPID, std::initializer_list<Bound> {{0, 0}, {0, 0}}, 0);
 
 Chassis chassis(
 	leftMotors,
