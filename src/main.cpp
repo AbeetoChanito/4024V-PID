@@ -1,0 +1,94 @@
+#include "main.h"
+
+#include "control/pid.hpp"
+#include "control/pidSettled.hpp"
+#include "control/chassis.hpp"
+
+pros::Controller controller(pros::E_CONTROLLER_MASTER);
+
+auto leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{-11, -12}, pros::v5::MotorGears::blue);
+auto rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{13, 14}, pros::v5::MotorGears::blue);
+pros::IMU imu(18);
+
+auto lateralPID = std::make_shared<PID>(0, 0, 0);
+PIDSettled lateralSettled(lateralPID, {{0, 0}, {0, 0}}, 0);
+
+auto angularPID = std::make_shared<PID>(0, 0, 0);
+PIDSettled angularSettled(angularPID, {{0, 0}, {0, 0}}, 0);
+
+auto swingPID = std::make_shared<PID>(0, 0, 0);
+PIDSettled swingSettled(swingPID, {{0, 0}, {0, 0}}, 0);
+
+Chassis chassis(
+	leftMotors,
+	rightMotors,
+	imu,
+	3.25,
+	0.75,
+	lateralPID,
+	lateralSettled,
+	angularPID,
+	angularSettled,
+	swingPID,
+	swingSettled
+);
+
+/**
+ * Runs initialization code. This occurs as soon as the program is started.
+ *
+ * All other competition modes are blocked by initialize; it is recommended
+ * to keep execution time for this mode under a few seconds.
+ */
+void initialize() {
+	pros::lcd::initialize();
+}
+
+/**
+ * Runs while the robot is in the disabled state of Field Management System or
+ * the VEX Competition Switch, following either autonomous or opcontrol. When
+ * the robot is enabled, this task will exit.
+ */
+void disabled() {}
+
+/**
+ * Runs after initialize(), and before autonomous when connected to the Field
+ * Management System or the VEX Competition Switch. This is intended for
+ * competition-specific initialization routines, such as an autonomous selector
+ * on the LCD.
+ *
+ * This task will exit when the robot is enabled and autonomous or opcontrol
+ * starts.
+ */
+void competition_initialize() {}
+
+/**
+ * Runs the user autonomous code. This function will be started in its own task
+ * with the default priority and stack size whenever the robot is enabled via
+ * the Field Management System or the VEX Competition Switch in the autonomous
+ * mode. Alternatively, this function may be called in initialize or opcontrol
+ * for non-competition testing purposes.
+ *
+ * If the robot is disabled or communications is lost, the autonomous task
+ * will be stopped. Re-enabling the robot will restart the task, not re-start it
+ * from where it left off.
+ */
+void autonomous() {}
+
+/**
+ * Runs the operator control code. This function will be started in its own task
+ * with the default priority and stack size whenever the robot is enabled via
+ * the Field Management System or the VEX Competition Switch in the operator
+ * control mode.
+ *
+ * If no competition control is connected, this function will run immediately
+ * following initialize().
+ *
+ * If the robot is disabled or communications is lost, the
+ * operator control task will be stopped. Re-enabling the robot will restart the
+ * task, not resume it from where it left off.
+ */
+void opcontrol() {
+	while (true) {
+		pros::delay(20); // Run for 20 ms then update
+	}
+}
