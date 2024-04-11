@@ -6,8 +6,8 @@
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
-auto leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{-11, -12}, pros::v5::MotorGears::blue);
-auto rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{13, 14}, pros::v5::MotorGears::blue);
+auto leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{1, -2, 3}, pros::v5::MotorGears::blue);
+auto rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{-8, 9, -10}, pros::v5::MotorGears::blue);
 pros::IMU imu(18);
 
 auto lateralPID = std::make_shared<PID>(0, 0, 0);
