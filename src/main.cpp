@@ -46,6 +46,15 @@ pros::adi::Pneumatics wingBackLeft('d', false);
 pros::adi::Pneumatics hangUp('e', false);
 pros::adi::Pneumatics hangDown('f', false);
 
+// controls
+constexpr pros::controller_digital_e_t INTAKE_BUTTON = pros::E_CONTROLLER_DIGITAL_L1;
+constexpr pros::controller_digital_e_t OUTTAKE_BUTTON = pros::E_CONTROLLER_DIGITAL_L2;
+constexpr pros::controller_digital_e_t FRONT_LEFT_WING_BUTTON = pros::E_CONTROLLER_DIGITAL_RIGHT;
+constexpr pros::controller_digital_e_t FRONT_RIGHT_WING_BUTTON = pros::E_CONTROLLER_DIGITAL_Y;
+constexpr pros::controller_digital_e_t BACK_LEFT_WING_BUTTON = pros::E_CONTROLLER_DIGITAL_R2;
+constexpr pros::controller_digital_e_t HANG_BUTTON = pros::E_CONTROLLER_DIGITAL_R1;
+constexpr pros::controller_digital_e_t REVERSE_BUTTON = pros::E_CONTROLLER_DIGITAL_X;
+
 /**
  * Runs initialization code. This occurs as soon as the program is started.
  *
@@ -101,17 +110,6 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	constexpr pros::controller_digital_e_t INTAKE_BUTTON = pros::E_CONTROLLER_DIGITAL_L1;
-	constexpr pros::controller_digital_e_t OUTTAKE_BUTTON = pros::E_CONTROLLER_DIGITAL_L2;
-
-	constexpr pros::controller_digital_e_t FRONT_LEFT_WING = pros::E_CONTROLLER_DIGITAL_RIGHT;
-	constexpr pros::controller_digital_e_t FRONT_RIGHT_WING = pros::E_CONTROLLER_DIGITAL_Y;
-	constexpr pros::controller_digital_e_t BACK_LEFT_WING = pros::E_CONTROLLER_DIGITAL_R2;
-
-	constexpr pros::controller_digital_e_t HANG_BUTTON = pros::E_CONTROLLER_DIGITAL_R1;
-
-	constexpr pros::controller_digital_e_t REVERSE_BUTTON = pros::E_CONTROLLER_DIGITAL_X;
-
 	pros::Mutex hangMutex;
 
 	bool hangedUp = false;
@@ -125,19 +123,19 @@ void opcontrol() {
 			intake.move(0);
 		}
 
-		if (controller.get_digital(FRONT_LEFT_WING)) {
+		if (controller.get_digital(FRONT_LEFT_WING_BUTTON)) {
 			wingFrontLeft.extend();
 		} else {
 			wingFrontLeft.retract();
 		}
 
-		if (controller.get_digital(FRONT_RIGHT_WING)) {
+		if (controller.get_digital(FRONT_RIGHT_WING_BUTTON)) {
 			wingFrontRight.extend();
 		} else {
 			wingFrontRight.retract();
 		}
 
-		if (controller.get_digital(BACK_LEFT_WING)) {
+		if (controller.get_digital(BACK_LEFT_WING_BUTTON)) {
 			wingBackLeft.extend();
 		} else {
 			wingBackLeft.retract();
