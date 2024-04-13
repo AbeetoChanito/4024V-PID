@@ -18,12 +18,14 @@ static float shortenPath(float error) {
 }
 
 static float capSpeed(float speed, float maxSpeed) {
-    return std::signbit(speed) * std::min(std::abs(speed), maxSpeed);
+    if (speed > maxSpeed) return maxSpeed;
+    if (speed < -maxSpeed) return -maxSpeed;
+    return speed;
 }
 
 void Chassis::turn(float targetHeading, float maxSpeed) {
     m_angularPID->reset();
-    m_angularSettled.reset();
+    m_angularSettled->reset();
 
     while (!m_angularSettled->isSettled()) {
         float error = shortenPath(targetHeading - m_imu.get_rotation());
@@ -31,6 +33,8 @@ void Chassis::turn(float targetHeading, float maxSpeed) {
         float output = capSpeed(m_angularPID->update(error), maxSpeed);
 
         arcadeControl(0, output);
+
+        pros::delay(10);
     }
     
     brakeMotors();
@@ -38,7 +42,7 @@ void Chassis::turn(float targetHeading, float maxSpeed) {
 
 void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed) {
     m_swingPID->reset();
-    m_swingSettled.reset();
+    m_swingSettled->reset();
 
     if (swingType == SwingType::LeftSwing) {
         m_rightMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -56,8 +60,10 @@ void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed) {
         if (swingType == SwingType::LeftSwing) {
             tankControl(output, 0);
         } else {
-            tankControl(0, output);
+            tankControl(0, -output);
         }
+
+        pros::delay(10);
     }
     
     if (swingType == SwingType::LeftSwing) {
@@ -71,17 +77,22 @@ void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed) {
 
 void Chassis::move(float targetDistance, float maxSpeed) {
     m_lateralPID->reset();
-    m_lateralSettled.reset();
+    m_lateralSettled->reset();
 
     m_leftMotor->tare_position_all();
     m_rightMotor->tare_position_all();
 
-    while (!m_lateralSettled->isSettled()) {
-        float error = (m_leftMotor->get_position(0) + m_rightMotor->get_position(0)) / 2 * m_gearRatio * m_wheelDiameter * M_PI;
+    m_leftMotor->set_encoder_units(pros::MotorUnits::rotations);
+    m_rightMotor->set_encoder_units(pros::MotorUnits::rotations);
+
+    while (true) {
+        float error = targetDistance - (m_leftMotor->get_position(0) + m_rightMotor->get_position(0)) / 2 * m_gearRatio * m_wheelDiameter * M_PI;
 
         float output = capSpeed(m_lateralPID->update(error), maxSpeed);
         
         arcadeControl(output, 0);
+
+        pros::delay(10);
     }
 
     brakeMotors();

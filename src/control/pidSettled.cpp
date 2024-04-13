@@ -21,6 +21,10 @@ bool Bound::isSettled(float error) {
     return false;
 }
 
+void Bound::reset() {
+    m_timer.stop();
+}
+
 PIDSettled::PIDSettled(std::shared_ptr<PID> pid, std::initializer_list<Bound> bounds, float maxTime)
     : m_pid(pid), m_bounds(bounds) {
     if (maxTime != 0) {

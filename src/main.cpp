@@ -12,13 +12,13 @@ auto leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::
 auto rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{1, -2, 3}, pros::v5::MotorGears::blue);
 pros::IMU imu(18);
 
-auto lateralPID = std::make_shared<PID>(0, 0, 0);
+auto lateralPID = std::make_shared<PID>(10, 0, 0);
 auto lateralSettled = std::make_shared<PIDSettled>(lateralPID, std::initializer_list<Bound> {{0, 0}, {0, 0}}, 0);
 
-auto angularPID = std::make_shared<PID>(0, 0, 0);
+auto angularPID = std::make_shared<PID>(3, 0, 0);
 auto angularSettled = std::make_shared<PIDSettled>(angularPID, std::initializer_list<Bound> {{0, 0}, {0, 0}}, 0);
 
-auto swingPID = std::make_shared<PID>(0, 0, 0);
+auto swingPID = std::make_shared<PID>(2, 0, 0);
 auto swingSettled = std::make_shared<PIDSettled>(swingPID, std::initializer_list<Bound> {{0, 0}, {0, 0}}, 0);
 
 Chassis chassis(
@@ -72,6 +72,7 @@ void doHangDown() {
  */
 void initialize() {
 	pros::lcd::initialize();
+	imu.reset();
 }
 
 /**
@@ -103,7 +104,9 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() {}
+void autonomous() {
+	chassis.swing(90, SwingType::RightSwing);
+}
 
 /**
  * Runs the operator control code. This function will be started in its own task
