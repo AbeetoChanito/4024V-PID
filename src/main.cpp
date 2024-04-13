@@ -47,6 +47,15 @@ pros::adi::Pneumatics wingBackLeft('g', false);
 pros::adi::Pneumatics hangUp('e', false);
 pros::adi::Pneumatics hangDown('f', false);
 
+void doHangUp() {
+	hangUp.extend();
+}
+
+void doHangDown() {
+	hangUp.retract();
+	hangDown.extend();
+}
+
 // controls
 constexpr pros::controller_digital_e_t INTAKE_BUTTON = pros::E_CONTROLLER_DIGITAL_L1;
 constexpr pros::controller_digital_e_t OUTTAKE_BUTTON = pros::E_CONTROLLER_DIGITAL_L2;
@@ -55,13 +64,13 @@ constexpr pros::controller_digital_e_t FRONT_RIGHT_WING_BUTTON = pros::E_CONTROL
 constexpr pros::controller_digital_e_t BACK_LEFT_WING_BUTTON = pros::E_CONTROLLER_DIGITAL_R2;
 constexpr pros::controller_digital_e_t HANG_BUTTON = pros::E_CONTROLLER_DIGITAL_UP;
 
-void doHangUp() {
-	hangUp.extend();
-}
+// auton selector
+constexpr uint8_t NUMBER_OF_AUTOS = 8;
 
-void doHangDown() {
-	hangUp.retract();
-	hangDown.extend();
+pros::adi::Potentiometer autonPot('A');
+
+uint8_t getSelectedAuto() {
+	return std::floor(autonPot.get_value() / 4096.0 * (float) NUMBER_OF_AUTOS);
 }
 
 /**
