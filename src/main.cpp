@@ -3,12 +3,13 @@
 #include "control/pid.hpp"
 #include "control/pidSettled.hpp"
 #include "control/chassis.hpp"
+#include "control/timer.hpp"
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // chassis config
-auto leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{1, -2, 3}, pros::v5::MotorGears::blue);
-auto rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{-8, 9, -10}, pros::v5::MotorGears::blue);
+auto leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{-8, 9, -10}, pros::v5::MotorGears::blue);
+auto rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<std::int8_t>{1, -2, 3}, pros::v5::MotorGears::blue);
 pros::IMU imu(18);
 
 auto lateralPID = std::make_shared<PID>(0, 0, 0);
@@ -35,12 +36,12 @@ Chassis chassis(
 );
 
 // intake
-pros::MotorGroup intake(std::initializer_list<int8_t> {11, 20});
+pros::MotorGroup intake(std::initializer_list<int8_t> {-11, 20});
 
 // wings
 pros::adi::Pneumatics wingFrontLeft('b', false);
 pros::adi::Pneumatics wingFrontRight('c', false);
-pros::adi::Pneumatics wingBackLeft('d', false);
+pros::adi::Pneumatics wingBackLeft('g', false);
 
 // hang
 pros::adi::Pneumatics hangUp('e', false);
@@ -52,8 +53,16 @@ constexpr pros::controller_digital_e_t OUTTAKE_BUTTON = pros::E_CONTROLLER_DIGIT
 constexpr pros::controller_digital_e_t FRONT_LEFT_WING_BUTTON = pros::E_CONTROLLER_DIGITAL_RIGHT;
 constexpr pros::controller_digital_e_t FRONT_RIGHT_WING_BUTTON = pros::E_CONTROLLER_DIGITAL_Y;
 constexpr pros::controller_digital_e_t BACK_LEFT_WING_BUTTON = pros::E_CONTROLLER_DIGITAL_R2;
-constexpr pros::controller_digital_e_t HANG_BUTTON = pros::E_CONTROLLER_DIGITAL_R1;
-constexpr pros::controller_digital_e_t REVERSE_BUTTON = pros::E_CONTROLLER_DIGITAL_X;
+constexpr pros::controller_digital_e_t HANG_BUTTON = pros::E_CONTROLLER_DIGITAL_UP;
+
+void doHangUp() {
+	hangUp.extend();
+}
+
+void doHangDown() {
+	hangUp.retract();
+	hangDown.extend();
+}
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -110,9 +119,11 @@ void autonomous() {}
  * task, not resume it from where it left off.
  */
 void opcontrol() {
-	pros::Mutex hangMutex;
+	Timer timer;
 
 	bool hangedUp = false;
+
+	timer.start();
 
 	while (true) {
 		if (controller.get_digital(INTAKE_BUTTON)) {
@@ -141,33 +152,23 @@ void opcontrol() {
 			wingBackLeft.retract();
 		}
 
-		if (controller.get_digital_new_press(pros::E_CONTROLLER_DIGITAL_UP)) {
+		if (controller.get_digital_new_press(HANG_BUTTON)) {
 			if (hangedUp) {
-				pros::Task hangTask([&](){
-					hangMutex.take();
-					hangUp.extend();
-					pros::delay(250);
-					hangUp.retract();
-					hangMutex.give();
-				});
+				doHangDown();
 			} else {
-				pros::Task hangTask([&](){
-					hangMutex.take();
-					hangDown.extend();
-					hangMutex.give();
-				});
+				doHangUp();
 			}
 
 			hangedUp = true;
 		}
 
 		float left = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-		float right = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
+		float right = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
 
-		if (controller.get_digital(REVERSE_BUTTON)) {
-			chassis.tankControl(-left, -right);
-		} else {
-			chassis.tankControl(left, right);
+		chassis.tankControl(left, right);
+
+		if (105 - timer.getElapsedTime() < 0.125 && hangedUp) {
+			doHangDown();
 		}
 
  		pros::delay(10);
