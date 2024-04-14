@@ -9,6 +9,10 @@ void Chassis::brakeMotors() {
     m_rightMotor->brake();
 }
 
+void Chassis::initialize() {
+    m_imu.reset(true);
+}
+
 void Chassis::setHeading(float heading) {
     m_imu.set_rotation(heading);
 }

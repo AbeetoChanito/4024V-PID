@@ -29,12 +29,13 @@ class Chassis {
             std::shared_ptr<PID> swingPID,
             std::shared_ptr<PIDSettled> swingSettled
         );
-
         void tankControl(float left, float right);
 
         void arcadeControl(float throttle, float turn);
 
         void brakeMotors();
+
+        void initialize();
 
         void setHeading(float heading);
         
