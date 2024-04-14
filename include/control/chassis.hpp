@@ -5,7 +5,7 @@
 
 #include "control/pid.hpp"
 #include "control/pidSettled.hpp"
-#include "pros/motors.h"
+#include "control/angleUtil.hpp"
 
 #include <memory>
 
@@ -38,9 +38,9 @@ class Chassis {
 
         void setHeading(float heading);
         
-        void turn(float targetHeading, float maxSpeed = 127);
+        void turn(float targetHeading, float maxSpeed = 127, AngularDirection direction = AngularDirection::ShortestPath);
 
-        void swing(float targetHeading, SwingType swingType, float maxSpeed = 127);
+        void swing(float targetHeading, SwingType swingType, float maxSpeed = 127, AngularDirection direction = AngularDirection::ShortestPath);
 
         void move(float targetDistance, float maxSpeed = 127);
     private:

@@ -13,22 +13,18 @@ void Chassis::setHeading(float heading) {
     m_imu.set_rotation(heading);
 }
 
-static float shortenPath(float error) {
-    return std::remainder(error, 360);
-}
-
 static float capSpeed(float speed, float maxSpeed) {
     if (speed > maxSpeed) return maxSpeed;
     if (speed < -maxSpeed) return -maxSpeed;
     return speed;
 }
 
-void Chassis::turn(float targetHeading, float maxSpeed) {
+void Chassis::turn(float targetHeading, float maxSpeed, AngularDirection direction) {
     m_angularPID->reset();
     m_angularSettled->reset();
 
     while (!m_angularSettled->isSettled()) {
-        float error = shortenPath(targetHeading - m_imu.get_rotation());
+        float error = getPath(targetHeading, m_imu.get_rotation(), direction);
 
         float output = capSpeed(m_angularPID->update(error), maxSpeed);
 
@@ -40,7 +36,7 @@ void Chassis::turn(float targetHeading, float maxSpeed) {
     brakeMotors();
 }
 
-void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed) {
+void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed, AngularDirection direction) {
     m_swingPID->reset();
     m_swingSettled->reset();
 
@@ -53,7 +49,7 @@ void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed) {
     }
 
     while (!m_angularSettled->isSettled()) {
-        float error = shortenPath(targetHeading - m_imu.get_rotation());
+        float error = getPath(targetHeading, m_imu.get_rotation(), direction);
 
         float output = capSpeed(m_swingPID->update(error), maxSpeed);
 
