@@ -13,6 +13,8 @@ class PID {
         float update(float error);
 
         float getError();
+
+        bool isSettling();
     private:
         float m_kp;
         float m_ki;
@@ -23,4 +25,6 @@ class PID {
         float m_lastError;
 
         Timer m_timer;
+
+        bool m_isSettling = false;
 };
