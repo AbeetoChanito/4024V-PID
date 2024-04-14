@@ -4,6 +4,7 @@
 #include "control/pidSettled.hpp"
 #include "control/chassis.hpp"
 #include "control/timer.hpp"
+#include "pros/optical.hpp"
 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
@@ -71,6 +72,13 @@ pros::adi::Potentiometer autonPot('A');
 
 uint8_t getSelectedAuto() {
 	return std::floor(autonPot.get_value() / 4096.0 * (float) NUMBER_OF_AUTOS);
+}
+
+// optical
+pros::Optical optical(4);
+
+bool hueIsInTolerance(float targetHue, float tolerance = 10) {
+	return std::abs(targetHue - optical.get_hue()) < tolerance;
 }
 
 /**
@@ -179,7 +187,7 @@ void opcontrol() {
 
 		chassis.tankControl(left, right);
 
-		if (105 - timer.getElapsedTime() < 0.125 && hangedUp) {
+		if ((hueIsInTolerance(0) || hueIsInTolerance(240)) && hangedUp) {
 			doHangDown();
 		}
 
