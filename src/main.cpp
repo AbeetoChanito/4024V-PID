@@ -7,7 +7,6 @@
 
 #include "robotControls.hpp"
 #include "robotSubsystems.hpp"
-#include "optical.hpp"
 #include "autonSelector.hpp"
 #include "chassisConfig.hpp"
 
@@ -116,12 +115,6 @@ void opcontrol() {
 		float right = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
 
 		chassis.tankControl(left, right);
-
-		if ((hueIsInTolerance(0) && saturationIsInTolerance(100) || // red
-			(hueIsInTolerance(240) && saturationIsInTolerance(100)))  // blue
-			&& hangedUp) {
-			doHangDown();
-		}
 
  		pros::delay(10);
 	}
