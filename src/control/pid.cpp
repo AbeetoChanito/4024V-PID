@@ -43,12 +43,19 @@ void PID::enableLogging(float maxTime) {
     pros::Task task([this, maxTime](){
         Timer timer;
 
-        while (pros::competition::is_autonomous() && timer.getElapsedTime() < maxTime) {
-            std::cout << timer.getElapsedTime() << " " << m_lastError << "," << std::flush;
+        std::cout << "START" << std::endl;	
+        pros::delay(10);
 
-            if (timer.isStopped()) timer.start();
+        timer.start();
+
+        while (pros::competition::is_autonomous() && timer.getElapsedTime() < maxTime) {
+            std::cout << timer.getElapsedTime() << " " << m_lastError << std::endl;
 
             pros::delay(10);
         }
+
+        std::cout << "STOP" << std::endl;
     });
+
+    pros::delay(10); // give time for timer to initialize
 }
