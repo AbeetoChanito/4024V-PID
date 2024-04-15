@@ -123,7 +123,6 @@ def get_stage_binary_search(constants, mode):
 
     return constants
 
-
 constants = get_starting_constants()
 
 while True:
