@@ -44,7 +44,7 @@ void PID::enableLogging(float maxTime) {
         Timer timer;
 
         while (pros::competition::is_autonomous() && timer.getElapsedTime() < maxTime) {
-            std::cout << m_lastError << std::flush;
+            std::cout << timer.getElapsedTime() << " " << m_lastError << "," << std::flush;
 
             if (timer.isStopped()) timer.start();
 

@@ -55,7 +55,7 @@ void competition_initialize() {}
  */
 void autonomous() {
 	// callSelectedAuton();
-	angularPID->enableLogging();
+	angularPID->enableLogging(5);
 	chassis.turn(90);
 }
 
