@@ -9,6 +9,7 @@
 #include "robotSubsystems.hpp"
 #include "optical.hpp"
 #include "autonSelector.hpp"
+#include "chassisConfig.hpp"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -53,7 +54,9 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	callSelectedAuton();
+	// callSelectedAuton();
+	angularPID->enableLogging();
+	chassis.turn(90);
 }
 
 /**

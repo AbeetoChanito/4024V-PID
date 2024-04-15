@@ -15,6 +15,8 @@ class PID {
         float getError();
 
         bool isSettling();
+
+        void enableLogging(float maxTime = 0);
     private:
         float m_kp;
         float m_ki;

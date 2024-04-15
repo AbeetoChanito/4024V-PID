@@ -19,13 +19,6 @@ extern pros::adi::Pneumatics hangDown;
 
 extern pros::MotorGroup intake;
 
-extern std::shared_ptr<pros::MotorGroup> leftMotors;
-extern std::shared_ptr<pros::MotorGroup> rightMotors;
-
-extern pros::IMU imu;
-
-extern Chassis chassis;
-
 void doHangUp();
 
 void doHangDown();
