@@ -21,11 +21,13 @@ void PID::reset() {
 
 float PID::update(float error) {
     float dt = m_timer.getElapsedTime();
-    
-    m_isSettling = (std::signbit(error) != std::signbit(m_lastError));
+
+    bool signFlip = (std::signbit(error) != std::signbit(m_lastError));
+
+    if (signFlip) m_isSettling = true;
 
     m_integral += error * dt;
-    if (error > m_iMax || m_isSettling) { m_integral = 0; }
+    if (error > m_iMax || signFlip) { m_integral = 0; }
 
     float deltaError = (error - m_lastError) / dt;
     m_lastError = error;
@@ -51,7 +53,7 @@ void PID::enableLogging(float maxTime) {
         while (pros::competition::is_autonomous() && timer.getElapsedTime() < maxTime) {
             std::cout << timer.getElapsedTime() << " " << m_lastError << std::endl;
 
-            pros::delay(10);
+            pros::delay(50);
         }
 
         std::cout << "STOP" << std::endl;
