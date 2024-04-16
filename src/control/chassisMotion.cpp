@@ -1,6 +1,6 @@
 #include "control/chassis.hpp"
 
-#include <cmath>
+#include <numbers>
 
 void Chassis::brakeMotors() {
     m_leftMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -28,7 +28,13 @@ void Chassis::turn(float targetHeading, float maxSpeed, AngularDirection directi
     m_angularSettled->reset();
 
     while (!m_angularSettled->isSettled()) {
-        float error = getPath(targetHeading, m_imu.get_rotation(), direction);
+        float error;
+
+        if (m_angularPID->isSettling()) {
+            error = getPath(targetHeading, m_imu.get_rotation(), AngularDirection::ShortestPath);
+        } else {
+            error = getPath(targetHeading, m_imu.get_rotation(), direction);
+        }
 
         float output = capSpeed(m_angularPID->update(error), maxSpeed);
 
@@ -52,8 +58,14 @@ void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed, An
         m_leftMotor->brake();
     }
 
-    while (!m_angularSettled->isSettled()) {
-        float error = getPath(targetHeading, m_imu.get_rotation(), direction);
+    while (!m_swingSettled->isSettled()) {
+        float error;
+
+        if (m_swingPID->isSettling()) {
+            error = getPath(targetHeading, m_imu.get_rotation(), AngularDirection::ShortestPath);
+        } else {
+            error = getPath(targetHeading, m_imu.get_rotation(), direction);
+        }
 
         float output = capSpeed(m_swingPID->update(error), maxSpeed);
 
@@ -85,8 +97,9 @@ void Chassis::move(float targetDistance, float maxSpeed) {
     m_leftMotor->set_encoder_units(pros::MotorUnits::rotations);
     m_rightMotor->set_encoder_units(pros::MotorUnits::rotations);
 
-    while (true) {
-        float error = targetDistance - (m_leftMotor->get_position(0) + m_rightMotor->get_position(0)) / 2 * m_gearRatio * m_wheelDiameter * M_PI;
+    while (!m_lateralSettled->isSettled()) {
+        float error = targetDistance - (m_leftMotor->get_position(0) + m_rightMotor->get_position(0)) / 2 
+            * m_gearRatio * m_wheelDiameter * std::numbers::pi;
 
         float output = capSpeed(m_lateralPID->update(error), maxSpeed);
         
