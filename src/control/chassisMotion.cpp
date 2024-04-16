@@ -2,6 +2,8 @@
 
 #include <numbers>
 
+#include "pros/llemu.hpp"
+
 void Chassis::brakeMotors() {
     m_leftMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
     m_rightMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -23,6 +25,10 @@ static float capSpeed(float speed, float maxSpeed) {
     return speed;
 }
 
+static void displayError(const char* motion, float error) {
+    pros::lcd::print(1 ,"%s error: %f", motion, error);
+}
+
 void Chassis::turn(float targetHeading, float maxSpeed, AngularDirection direction) {
     m_angularPID->reset();
     m_angularSettled->reset();
@@ -35,6 +41,8 @@ void Chassis::turn(float targetHeading, float maxSpeed, AngularDirection directi
         } else {
             error = getPath(targetHeading, m_imu.get_rotation(), direction);
         }
+
+        displayError("turn", error);
 
         float output = capSpeed(m_angularPID->update(error), maxSpeed);
 
@@ -66,6 +74,8 @@ void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed, An
         } else {
             error = getPath(targetHeading, m_imu.get_rotation(), direction);
         }
+
+        displayError("swing", error);
 
         float output = capSpeed(m_swingPID->update(error), maxSpeed);
 
@@ -100,6 +110,8 @@ void Chassis::move(float targetDistance, float maxSpeed) {
     while (!m_lateralSettled->isSettled()) {
         float error = targetDistance - (m_leftMotor->get_position(0) + m_rightMotor->get_position(0)) / 2 
             * m_gearRatio * m_wheelDiameter * std::numbers::pi;
+
+        displayError("distance", error);
 
         float output = capSpeed(m_lateralPID->update(error), maxSpeed);
         
