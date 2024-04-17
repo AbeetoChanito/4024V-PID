@@ -5,28 +5,30 @@
 #include <limits>
 
 class PID {
-    public:
-        PID(float kp, float ki, float kd, float iMax = std::numeric_limits<float>::infinity());
+public:
+  PID(float kp, float ki, float kd,
+      float iMax = std::numeric_limits<float>::infinity());
 
-        void reset();
+  void reset();
 
-        float update(float error);
+  float update(float error);
 
-        float getError();
+  float getError();
 
-        bool isSettling();
+  bool isSettling();
 
-        void enableLogging(float maxTime = 0);
-    private:
-        float m_kp;
-        float m_ki;
-        float m_kd;
-        float m_iMax;
+  void enableLogging(float maxTime = 0);
 
-        float m_integral;
-        float m_lastError;
+private:
+  float m_kp;
+  float m_ki;
+  float m_kd;
+  float m_iMax;
 
-        Timer m_timer;
+  float m_integral;
+  float m_lastError;
 
-        bool m_isSettling = false;
+  Timer m_timer;
+
+  bool m_isSettling = false;
 };

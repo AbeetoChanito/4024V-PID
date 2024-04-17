@@ -1,17 +1,9 @@
 #include "autos.hpp"
 
-void closeSafe() {
+void closeSafe() {}
 
-}
+void closeRush() {}
 
-void closeRush() {
+void farSafe() {}
 
-}
-
-void farSafe() {
-
-}
-
-void farRush() {
-
-}
+void farRush() {}

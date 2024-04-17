@@ -3,16 +3,17 @@
 #include <cstdint>
 
 class Timer {
-    public:
-        Timer() = default;
-        
-        void stop();
+public:
+  Timer() = default;
 
-        void start();
+  void stop();
 
-        bool isStopped();
+  void start();
 
-        float getElapsedTime();
-    private:
-        std::uint32_t m_time = 0;
+  bool isStopped();
+
+  float getElapsedTime();
+
+private:
+  std::uint32_t m_time = 0;
 };

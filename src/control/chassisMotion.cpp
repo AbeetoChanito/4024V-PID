@@ -1,14 +1,16 @@
 #include "control/chassis.hpp"
 
+#include <cmath>
 #include <numbers>
 
 #include "pros/llemu.hpp"
+#include "pros/motors.h"
 
 void Chassis::brakeMotors() {
-    m_leftMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    m_rightMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    m_leftMotor->brake();
-    m_rightMotor->brake();
+    m_leftMotors->set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
+	m_rightMotors->set_brake_mode_all(pros::E_MOTOR_BRAKE_HOLD);
+    m_leftMotors->brake();
+    m_rightMotors->brake();
 }
 
 void Chassis::initialize() {
@@ -29,22 +31,15 @@ static void displayError(const char* motion, float error) {
     pros::lcd::print(1 ,"%s error: %f", motion, error);
 }
 
-void Chassis::turn(float targetHeading, float maxSpeed, AngularDirection direction) {
+void Chassis::turn(float targetHeading, float maxSpeed) {
     m_angularPID->reset();
     m_angularSettled->reset();
 
     while (!m_angularSettled->isSettled()) {
-        float error;
-
-        if (m_angularPID->isSettling()) {
-            error = getPath(targetHeading, m_imu.get_rotation(), AngularDirection::ShortestPath);
-        } else {
-            error = getPath(targetHeading, m_imu.get_rotation(), direction);
-        }
+        float error = targetHeading - m_imu.get_rotation();
+        float output = capSpeed(m_angularPID->update(targetHeading - m_imu.get_rotation()), maxSpeed);
 
         displayError("turn", error);
-
-        float output = capSpeed(m_angularPID->update(error), maxSpeed);
 
         arcadeControl(0, output);
 
@@ -54,30 +49,17 @@ void Chassis::turn(float targetHeading, float maxSpeed, AngularDirection directi
     brakeMotors();
 }
 
-void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed, AngularDirection direction) {
+void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed) {
     m_swingPID->reset();
     m_swingSettled->reset();
 
-    if (swingType == SwingType::LeftSwing) {
-        m_rightMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-        m_rightMotor->brake();
-    } else {
-        m_leftMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-        m_leftMotor->brake();
-    }
+    brakeMotors();
 
     while (!m_swingSettled->isSettled()) {
-        float error;
-
-        if (m_swingPID->isSettling()) {
-            error = getPath(targetHeading, m_imu.get_rotation(), AngularDirection::ShortestPath);
-        } else {
-            error = getPath(targetHeading, m_imu.get_rotation(), direction);
-        }
-
-        displayError("swing", error);
-
+        float error = targetHeading - m_imu.get_rotation();
         float output = capSpeed(m_swingPID->update(error), maxSpeed);
+        
+        displayError("swing", error);
 
         if (swingType == SwingType::LeftSwing) {
             tankControl(output, 0);
@@ -88,27 +70,21 @@ void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed, An
         pros::delay(10);
     }
     
-    if (swingType == SwingType::LeftSwing) {
-        m_leftMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-        m_leftMotor->brake();
-    } else {
-        m_rightMotor->set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-        m_rightMotor->brake();
-    }
+    brakeMotors();
 }
 
 void Chassis::move(float targetDistance, float maxSpeed) {
     m_lateralPID->reset();
     m_lateralSettled->reset();
 
-    m_leftMotor->tare_position_all();
-    m_rightMotor->tare_position_all();
+    m_leftMotors->tare_position_all();
+    m_rightMotors->tare_position_all();
 
-    m_leftMotor->set_encoder_units(pros::MotorUnits::rotations);
-    m_rightMotor->set_encoder_units(pros::MotorUnits::rotations);
+    m_leftMotors->set_encoder_units(pros::MotorUnits::rotations);
+    m_rightMotors->set_encoder_units(pros::MotorUnits::rotations);
 
     while (!m_lateralSettled->isSettled()) {
-        float error = targetDistance - (m_leftMotor->get_position(0) + m_rightMotor->get_position(0)) / 2 
+        float error = targetDistance - (m_leftMotors->get_position(0) + m_rightMotors->get_position(0)) / 2 
             * m_gearRatio * m_wheelDiameter * std::numbers::pi;
 
         displayError("distance", error);
