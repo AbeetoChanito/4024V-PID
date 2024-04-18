@@ -2,7 +2,6 @@
 
 #include "autonSelector.hpp"
 #include "chassisConfig.hpp"
-#include "control/chassis.hpp"
 #include "robotControls.hpp"
 #include "robotSubsystems.hpp"
 
@@ -16,8 +15,7 @@ void disabled() { showAuto(); }
 void competition_initialize() {}
 
 void autonomous() {
-  intake.move(127);
-  chassis.move(43);
+  callSelectedAuton();
 }
 
 void driveCurve(float curve) {}
