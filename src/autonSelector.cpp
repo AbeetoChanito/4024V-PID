@@ -13,8 +13,9 @@
 
 #include "autos.hpp"
 
-std::array<std::function<void(void)>, 4> autos{closeSafe, closeRush, farSafe,
-                                               farRush};
+std::array<std::function<void(void)>, 9> autos{qualClose_safeWP, qualClose_soloWP, qualFar_safeWP,
+                                               qualFar_6BallWP, elimsClose_rushRetreat, elimsClose_rushWedge,
+                                               elimsFar_6BallSafe, elimsFar_6BallRush, elimsFar_5BallRush};
 
 pros::adi::Potentiometer autonPot('A');
 

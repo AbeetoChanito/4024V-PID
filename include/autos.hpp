@@ -1,9 +1,19 @@
 #pragma once
 
-void closeSafe();
+void qualClose_safeWP();
 
-void closeRush();
+void qualClose_soloWP();
 
-void farSafe();
+void qualFar_safeWP();
 
-void farRush();
+void qualFar_6BallWP();
+
+void elimsClose_rushRetreat();
+
+void elimsClose_rushWedge();
+
+void elimsFar_6BallSafe();
+
+void elimsFar_6BallRush();
+
+void elimsFar_5BallRush();

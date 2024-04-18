@@ -1,4 +1,4 @@
 #include "autos.hpp"
 #include "robotSubsystems.hpp"
 
-void farRush() {}
+void qualFar_safeWP() {}

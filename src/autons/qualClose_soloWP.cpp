@@ -1,4 +1,4 @@
 #include "autos.hpp"
 #include "robotSubsystems.hpp"
 
-void closeSafe() {}
+void qualClose_soloWP() {}

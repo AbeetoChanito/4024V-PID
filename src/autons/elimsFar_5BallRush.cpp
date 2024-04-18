@@ -1,4 +1,6 @@
 #include "autos.hpp"
 #include "robotSubsystems.hpp"
 
-void closeRush() {}
+void elimsFar_5BallRush() {
+    
+}

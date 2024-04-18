@@ -1,4 +1,4 @@
 #include "autos.hpp"
 #include "robotSubsystems.hpp"
 
-void farSafe() {}
+void qualFar_6BallWP() {}
