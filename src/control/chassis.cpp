@@ -16,13 +16,8 @@ Chassis::Chassis(std::shared_ptr<pros::MotorGroup> leftMotor,
       m_swingPID(swingPID), m_swingSettled(swingSettled) {}
 
 void Chassis::tankControl(float left, float right) {
-  if (left != 0) {
-    m_leftMotors->move(left);
-  }
-
-  if (right != 0) {
-    m_rightMotors->move(right);
-  }
+  m_leftMotors->move(left);
+  m_rightMotors->move(right);
 }
 
 void Chassis::arcadeControl(float throttle, float turn) {

@@ -3,10 +3,8 @@
 #include "autonSelector.hpp"
 #include "chassisConfig.hpp"
 #include "control/chassis.hpp"
-#include "pros/motors.h"
 #include "robotControls.hpp"
 #include "robotSubsystems.hpp"
-
 
 void initialize() {
   pros::lcd::initialize();
@@ -17,7 +15,19 @@ void disabled() { showAuto(); }
 
 void competition_initialize() {}
 
-void autonomous() {}
+void autonomous() {
+  intake.move(127);
+  chassis.move(43);
+}
+
+void driveCurve(float curve) {}
+
+float expoDriveCurve(float input) {
+  const float g = std::abs(input);
+  const float i = pow(DRIVE_CURVE_SCALE, g - 127) * g * std::copysign(1, input);
+  return (127.0 - DRIVE_MIN_OUTPUT) / 127.0f * i +
+         DRIVE_MIN_OUTPUT * std::copysign(1, input);
+}
 
 void opcontrol() {
   bool hangedUp = false;
@@ -59,8 +69,12 @@ void opcontrol() {
       hangedUp = true;
     }
 
-    float left = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y);
-    float right = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y);
+    float left =
+        expoDriveCurve(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
+    float right = expoDriveCurve(
+        controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_Y));
+
+    controller.print(0, 0, "%f %f", left, right);
 
     chassis.tankControl(left, right);
 

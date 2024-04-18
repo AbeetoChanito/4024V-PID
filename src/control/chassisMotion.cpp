@@ -62,9 +62,9 @@ void Chassis::swing(float targetHeading, SwingType swingType, float maxSpeed) {
         displayError("swing", error);
 
         if (swingType == SwingType::LeftSwing) {
-            tankControl(output, 0);
+            m_leftMotors->move(output);
         } else {
-            tankControl(0, -output);
+            m_rightMotors->move(-output);
         }
 
         pros::delay(10);
