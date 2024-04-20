@@ -29,6 +29,8 @@ float expoDriveCurve(float input) {
 void opcontrol() {
   bool hangedUp = false;
 
+  bool isBackWingToggle = false;
+
   while (true) {
     if (controller.get_digital(INTAKE_BUTTON)) {
       intake.move(127);
@@ -49,9 +51,18 @@ void opcontrol() {
     } else {
       wingFrontRight.retract();
     }
+
+    if (controller.get_digital_new_press(BACK_LEFT_WING_TOGGLE_BUTTON)) {
+      wingBackLeft.toggle();
+
+      isBackWingToggle = wingBackLeft.is_extended();
+    }
+
     if (controller.get_digital(BACK_LEFT_WING_BUTTON)) {
       wingBackLeft.extend();
-    } else {
+
+      isBackWingToggle = false;
+    } else if (!isBackWingToggle) {
       wingBackLeft.retract();
     }
 
