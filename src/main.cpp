@@ -76,6 +76,10 @@ void opcontrol() {
       hangedUp = true;
     }
 
+    if (hangedUp && hangLimitSwitch.get_new_press()) {
+      doHangDown();
+    }
+
     float left =
         expoDriveCurve(controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y));
     float right = expoDriveCurve(

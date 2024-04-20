@@ -15,6 +15,8 @@ extern pros::adi::Pneumatics hangDown;
 
 extern pros::MotorGroup intake;
 
+extern pros::adi::DigitalIn hangLimitSwitch;
+
 void doHangUp();
 
 void doHangDown();

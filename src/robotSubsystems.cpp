@@ -11,6 +11,8 @@ pros::adi::Pneumatics hangDown('f', false);
 
 pros::MotorGroup intake(std::initializer_list<int8_t>{-11, 20});
 
+pros::adi::DigitalIn hangLimitSwitch('h');
+
 void doHangUp() { hangUp.extend(); }
 
 void doHangDown() {
