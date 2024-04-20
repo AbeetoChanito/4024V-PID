@@ -1,6 +1,5 @@
 #include "main.h"
 
-#include "autos.hpp"
 #include "autonSelector.hpp"
 #include "chassisConfig.hpp"
 #include "robotControls.hpp"

@@ -1,12 +1,8 @@
 #pragma once
 
-#include <memory>
-
 #include "pros/adi.hpp"
 #include "pros/motor_group.hpp"
 #include "pros/misc.hpp"
-
-#include "control/chassis.hpp"
 
 extern pros::Controller controller;
 

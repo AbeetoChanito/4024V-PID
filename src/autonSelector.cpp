@@ -1,15 +1,11 @@
 #include "autonSelector.hpp"
 
 #include "pros/llemu.hpp"
-#include "pros/misc.hpp"
 #include "pros/rtos.hpp"
-
 
 #include <array>
 #include <cmath>
 #include <functional>
-#include <utility>
-
 
 #include "autos.hpp"
 
