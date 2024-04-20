@@ -2,7 +2,7 @@
 #include "chassisConfig.hpp"
 #include "robotSubsystems.hpp"
 
-void elimsClose_rushWedge() {
+void qualClose_rushWedge() {
     chassis.setHeading(9);
     intake.move(-127);
     pros::delay(200);
@@ -25,8 +25,8 @@ void elimsClose_rushWedge() {
     wingBackLeft.retract();
     chassis.swing(100, SwingType::RightSwing);
     intake.move(-127);
+    pros::delay(2000);
     chassis.move(26);
     pros::delay(500);
     intake.move(0);
-    chassis.move(-33);
 }

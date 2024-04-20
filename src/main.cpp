@@ -1,5 +1,6 @@
 #include "main.h"
 
+#include "autos.hpp"
 #include "autonSelector.hpp"
 #include "chassisConfig.hpp"
 #include "robotControls.hpp"
@@ -8,15 +9,14 @@
 void initialize() {
   pros::lcd::initialize();
   chassis.initialize();
+  showAuto();
 }
 
 void disabled() { showAuto(); }
 
 void competition_initialize() {}
 
-void autonomous() {
-  callSelectedAuton();
-}
+void autonomous() { callSelectedAuton(); }
 
 void driveCurve(float curve) {}
 
@@ -50,7 +50,6 @@ void opcontrol() {
     } else {
       wingFrontRight.retract();
     }
-
     if (controller.get_digital(BACK_LEFT_WING_BUTTON)) {
       wingBackLeft.extend();
     } else {

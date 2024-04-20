@@ -13,9 +13,13 @@
 
 #include "autos.hpp"
 
-std::array<std::function<void(void)>, 9> autos{qualClose_safeWP, qualClose_soloWP, qualFar_safeWP,
-                                               qualFar_6BallWP, elimsClose_rushRetreat, elimsClose_rushWedge,
-                                               elimsFar_6BallSafe, elimsFar_6BallRush, elimsFar_5BallRush};
+std::array<std::function<void(void)>, 9> autos {qualClose_safeWP, qualClose_rushWedge, qualClose_rushRetreat,
+                                               qualFar_safeWP, elimsClose_rushRetreat, elimsClose_rushWedge,
+                                               elimsFar_6BallSafe, elimsFar_4BallMidRush, elimsFar_4BallLeftRush};
+
+std::array<const char*, 9> autoNames {"Qual Close WP", "Qual Close Rush Wedge", "Qual Close Rush Retreat",
+                                    "Qual Far Safe WP", "Elims Close Rush Retreat", "Elims Close Rush Wedge",
+                                    "Elims Far 6 Ball Safe", "Elims Far 4 Ball Mid Rush", "Elims Far 4 Ball Left Rush"};
 
 pros::adi::Potentiometer autonPot('A');
 
@@ -24,16 +28,17 @@ uint8_t getAutonNumber() {
                     static_cast<float>(autos.size()));
 }
 
-void callSelectedAuton() { autos[getAutonNumber()](); }
+void callSelectedAuton() {
+  autos[getAutonNumber()](); 
+}
 
 void showAuto() {
   pros::Task task([]() {
-    while (pros::competition::is_disabled()) {
-      pros::lcd::print(0, "current selected auto: %i", getAutonNumber());
+    while (true) {
+      pros::lcd::print(1, "current selected auto:");
+      pros::lcd::print(2, "%s", autoNames[getAutonNumber()]);
 
       pros::delay(10);
     }
-
-    pros::lcd::clear_line(0);
   });
 }
