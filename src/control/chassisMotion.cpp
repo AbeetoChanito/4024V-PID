@@ -2,7 +2,6 @@
 
 #include <cmath>
 #include <numbers>
-#include <iostream>
 
 #include "pros/llemu.hpp"
 #include "pros/motors.h"
