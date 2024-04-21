@@ -4,7 +4,7 @@
 
 void qualClose_safeWP() {
     chassis.setHeading(135);
-    chassis.move(-5);
+    chassis.move(-6);
     intake.move(-127);
     wingBackLeft.extend();
     pros::delay(300);
@@ -13,7 +13,7 @@ void qualClose_safeWP() {
     wingBackLeft.retract();
     chassis.swing(100, SwingType::RightSwing);
     intake.move(-127);
-    chassis.move(32);
+    chassis.move(36);
     pros::delay(1000);
     intake.move(0);
 }

@@ -7,17 +7,17 @@ void elimsFar_4BallLeftRush() {
     intake.move(-127);
     pros::delay(200);
     intake.move(127);
-    chassis.move(51);
+    chassis.move(58);
     pros::delay(275);
     intake.move(0);
-    chassis.move(-10);
+    chassis.move(-11);
     chassis.turn(90);
     intake.move(-127);
     pros::delay(400);
     intake.move(0);
     chassis.turn(220);
     intake.move(127);
-    chassis.move(9);
+    chassis.move(10);
     pros::delay(300);
     intake.move(0);
     chassis.turn(85);
@@ -26,9 +26,9 @@ void elimsFar_4BallLeftRush() {
     pros::delay(600);
     chassis.arcadeControl(0, 0);
     intake.move(0);
-    chassis.move(-11);
+    chassis.move(-12);
     chassis.turn(0);
-    chassis.move(-42);
+    chassis.move(-47);
     // chassis.turn(-100);
     // intake.move(127);
     // chassis.move(25);
@@ -38,7 +38,7 @@ void elimsFar_4BallLeftRush() {
 
     chassis.turn(70);
     intake.move(-127);
-    chassis.move(15);
+    chassis.move(17);
     chassis.turn(45);
     intake.move(0);
     wingBackLeft.extend();
@@ -58,8 +58,8 @@ void elimsFar_4BallLeftRush() {
     pros::delay(400);
     intake.move(0);
     chassis.arcadeControl(0, 0);
-    chassis.move(-5);
+    chassis.move(-6);
     chassis.arcadeControl(127, 0);
     pros::delay(400);
-    chassis.move(-5);
+    chassis.move(-6);
 }

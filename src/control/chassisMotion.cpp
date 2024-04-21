@@ -91,8 +91,6 @@ void Chassis::move(float targetDistance, float maxSpeed) {
     m_leftMotors->set_encoder_units(pros::MotorUnits::rotations);
     m_rightMotors->set_encoder_units(pros::MotorUnits::rotations);
 
-    targetDistance *= (2.75 / 3.25) * (1 / 0.75);
-
     float lastOutput = NAN;
 
     while (!m_lateralSettled->isSettled()) {
