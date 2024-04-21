@@ -18,4 +18,4 @@ constexpr pros::controller_digital_e_t HANG_BUTTON =
     pros::E_CONTROLLER_DIGITAL_A;
 
 constexpr float DRIVE_MIN_OUTPUT = 0;
-constexpr float DRIVE_CURVE_SCALE = 1.05;
+constexpr float DRIVE_CURVE_SCALE = 1;
