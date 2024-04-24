@@ -11,9 +11,11 @@ void qualClose_safeWP() {
     intake.move(0);
     chassis.swing(60, SwingType::RightSwing);
     wingBackLeft.retract();
-    chassis.swing(100, SwingType::RightSwing);
+    chassis.swing(135, SwingType::RightSwing);
+    chassis.move(4);
+    chassis.swing(90, SwingType::RightSwing);
     intake.move(-127);
-    chassis.move(36);
+    chassis.move(34);
     pros::delay(1000);
     intake.move(0);
 }

@@ -16,6 +16,7 @@ void elimsFar_6BallSafe() {
     chassis.turn(60);
     chassis.move(9);
     wingBackLeft.extend();
+    wingFrontLeft.extend();
     chassis.swing(-20, SwingType::RightSwing);
     wingBackLeft.retract();
     chassis.swing(20, SwingType::RightSwing);
@@ -26,11 +27,12 @@ void elimsFar_6BallSafe() {
     chassis.arcadeControl(0, 0);
     intake.move(0);
     chassis.move(-16);
+    wingFrontLeft.retract();
     chassis.turn(-75);
     intake.move(127);
     chassis.move(51);
     pros::delay(300);
-    chassis.turn(70);
+    chassis.turn(65);
     intake.move(-100);
     chassis.move(11);
     pros::delay(500);
@@ -40,8 +42,9 @@ void elimsFar_6BallSafe() {
     chassis.move(19);
     pros::delay(300);
     intake.move(0);
-    chassis.turn(97);
+    chassis.turn(90);
     intake.move(-127);
+    pros::delay(150);
     wingFrontLeft.extend();
     chassis.arcadeControl(127, 0);
     pros::delay(750);

@@ -23,10 +23,10 @@ void qualClose_rushWedge() {
     chassis.move(8);
     chassis.swing(60, SwingType::RightSwing);
     wingBackLeft.retract();
-    chassis.swing(100, SwingType::RightSwing);
+    chassis.swing(95, SwingType::RightSwing);
     intake.move(-127);
     // pros::delay(2000);
-    chassis.move(29);
+    chassis.move(27);
     pros::delay(500);
     intake.move(0);
 }

@@ -25,7 +25,7 @@ void elimsClose_rushWedge() {
     wingBackLeft.retract();
     chassis.swing(100, SwingType::RightSwing);
     intake.move(-127);
-    chassis.move(29);
+    chassis.move(27);
     pros::delay(500);
     intake.move(0);
     chassis.move(-37);
