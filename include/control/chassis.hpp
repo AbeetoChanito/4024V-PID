@@ -20,7 +20,9 @@ public:
           std::shared_ptr<PID> angularPID,
           std::shared_ptr<PIDSettled> angularSettled,
           std::shared_ptr<PID> swingPID,
-          std::shared_ptr<PIDSettled> swingSettled);
+          std::shared_ptr<PIDSettled> swingSettled,
+          float slew);
+  
   void tankControl(float left, float right);
 
   void arcadeControl(float throttle, float turn);
@@ -54,4 +56,6 @@ private:
 
   std::shared_ptr<PID> m_swingPID;
   std::shared_ptr<PIDSettled> m_swingSettled;
+
+  float m_slew;
 };

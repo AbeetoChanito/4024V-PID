@@ -24,4 +24,5 @@ pros::IMU imu(15);
 
 Chassis chassis(leftMotors, rightMotors, imu, 2.75, 1, lateralPID,
                 lateralSettled, angularPID, angularSettled, swingPID,
-                swingSettled);
+                swingSettled,
+                100);

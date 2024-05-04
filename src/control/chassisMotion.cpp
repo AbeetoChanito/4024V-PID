@@ -27,7 +27,7 @@ static float capSpeed(float speed, float maxSpeed) {
     return speed;
 }
 
-static float slew(float speed, float lastSpeed, float maxChange = 20) {
+static float slew(float speed, float lastSpeed, float maxChange) {
     float change = speed - lastSpeed;
     if (change > maxChange) change = maxChange;
     else if (change < -maxChange) change = -maxChange;
@@ -100,7 +100,7 @@ void Chassis::move(float targetDistance, float maxSpeed) {
 
         float output = m_lateralPID->update(error);
         if (!std::isnan(lastOutput) && std::abs(error) > 7.5) {
-            output = slew(output, lastOutput);
+            output = slew(output, lastOutput, m_slew);
         }
         output = capSpeed(output, maxSpeed);
         lastOutput = output;

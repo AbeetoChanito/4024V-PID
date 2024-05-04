@@ -8,12 +8,14 @@ Chassis::Chassis(std::shared_ptr<pros::MotorGroup> leftMotor,
                  std::shared_ptr<PID> angularPID,
                  std::shared_ptr<PIDSettled> angularSettled,
                  std::shared_ptr<PID> swingPID,
-                 std::shared_ptr<PIDSettled> swingSettled)
+                 std::shared_ptr<PIDSettled> swingSettled,
+                 float slew)
     : m_leftMotors(leftMotor), m_rightMotors(rightMotor), m_imu(imu),
       m_wheelDiameter(wheelDiameter), m_gearRatio(gearRatio),
       m_lateralPID(lateralPID), m_lateralSettled(lateralSettled),
       m_angularPID(angularPID), m_angularSettled(angularSettled),
-      m_swingPID(swingPID), m_swingSettled(swingSettled) {}
+      m_swingPID(swingPID), m_swingSettled(swingSettled),
+      m_slew(slew) {}
 
 void Chassis::tankControl(float left, float right) {
   m_leftMotors->move(left);
