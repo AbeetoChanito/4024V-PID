@@ -17,8 +17,6 @@ void competition_initialize() {}
 
 void autonomous() { callSelectedAuton(); }
 
-void driveCurve(float curve) {}
-
 float expoDriveCurve(float input) {
   const float g = std::abs(input);
   const float i = pow(DRIVE_CURVE_SCALE, g - 127) * g * std::copysign(1, input);
